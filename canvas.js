@@ -22,7 +22,6 @@
 	
 	leftCellWidth = document.getElementById('cellx').getAttribute('width');
 	topCellHeight = document.getElementById('celly').getAttribute('height');
-	alert(topCellHeight);
 	context = document.getElementById('canvas').getContext("2d");
 	canvas = document.getElementById('canvas');
 	canvas.addEventListener("mousedown", mousedwn, false);
@@ -40,14 +39,14 @@
 		var mouseY = e.pageY - this.offsetTop;
 		
 		paint = true;
-		addClick(e.pageX - this.offsetLeft - leftCellWidth, e.pageY - this.offsetTop - topCellHeight);
+		addClick(e.pageX - this.offsetLeft - leftCellWidth+7, e.pageY - this.offsetTop - topCellHeight -7);
 		redraw();
 	}
 	
 	function mousemov(e)
 	{
 		if(paint){
-		addClick(e.pageX - this.offsetLeft - leftCellWidth, e.pageY - this.offsetTop - topCellHeight, true);
+		addClick(e.pageX - this.offsetLeft - leftCellWidth+7, e.pageY - this.offsetTop - topCellHeight - 7, true);
 		redraw();
 		}
 	}
