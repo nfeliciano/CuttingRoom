@@ -9,16 +9,28 @@
 	var context;
 	var padding = 25;
 	var lineWidth = 8;
-	var colorPurple = "#cb3594";
-	var colorGreen = "#659b41";
-	var colorYellow = "#ffcf33";
-	var colorBrown = "#986928";
+	var colorRed = "#f23021";
+	var colorPurple = "#9330b0";
+	var colorGreen = "#5ba63e";
+	var colorYellow = "#f6e91e";
+	var colorBlue = "#3c55af";
+	var colorOrange = "#ffa400";
 	var curColor = colorPurple;
 	var clickColor = new Array();
 	var clickSize = new Array();
 	var curSize = "normal";
 	var img_curtain = new Image();
 	img_curtain.src = "curtain.png";
+	var img_paint_button = new Image();
+	img_paint_button.src = "paint-button.png";
+	var img_pictures_button = new Image();
+	img_pictures_button.src = "pictures-button.png";
+	var img_video_button = new Image();
+	img_video_button.src = "video-button.png";
+	var img_sound_button = new Image();
+	img_sound_button.src = "sound-button.png";
+	var img_pallette_buttons = new Image();
+	img_pallette_buttons.src = "paint-pallette.png";
 	
 	leftCellWidth = document.getElementById('cellx').getAttribute('width');
 	topCellHeight = document.getElementById('celly').getAttribute('height');
@@ -30,24 +42,60 @@
 	
 	function drawInitialFrame()
 	{
-		context.drawImage(img_curtain, 0, 0);
+		//context.drawImage(img_curtain, 0, 0);
+		context.drawImage(img_paint_button, 725, 90);	
+		context.drawImage(img_pictures_button, 725, 160);
+		context.drawImage(img_video_button, 725, 230);
+		context.drawImage(img_sound_button, 725, 300);
+		context.drawImage(img_pallette_buttons, 34, 90);
+
 	}
 
 	function mousedwn(e)
 	{
-		var mouseX = e.pageX - this.offsetLeft;
-		var mouseY = e.pageY - this.offsetTop;
-		
-		paint = true;
-		addClick(e.pageX - this.offsetLeft - leftCellWidth+7, e.pageY - this.offsetTop - topCellHeight -7);
-		redraw();
+		var mouseX = e.pageX - this.offsetLeft - leftCellWidth+20;
+		var mouseY = e.pageY - this.offsetTop - topCellHeight -7;
+		if (mouseX > 34 && mouseX < 80 && mouseY > 90 && mouseY < 150)
+		{
+			curColor = colorPurple;	
+		}
+		if (mouseX > 34 && mouseX < 80 && mouseY > 150 && mouseY < 197)
+		{
+			curColor = colorBlue;	
+		}
+		if (mouseX > 34 && mouseX < 80 && mouseY > 197 && mouseY < 244)
+		{
+			curColor = colorGreen;	
+		}
+		if (mouseX > 34 && mouseX < 80 && mouseY > 244 && mouseY < 291)
+		{
+			curColor = colorYellow;	
+		}
+		if (mouseX > 34 && mouseX < 80 && mouseY > 291 && mouseY < 338)
+		{
+			curColor = colorOrange;	
+		}
+		if (mouseX > 34 && mouseX < 80 && mouseY > 338 && mouseY < 385)
+		{
+			curColor = colorRed;	
+		}
+		else
+		{
+			paint = true;
+			addClick(mouseX, mouseY);
+			redraw();
+		}
 	}
 	
 	function mousemov(e)
 	{
-		if(paint){
-		addClick(e.pageX - this.offsetLeft - leftCellWidth+7, e.pageY - this.offsetTop - topCellHeight - 7, true);
-		redraw();
+		var mouseX = e.pageX - this.offsetLeft - leftCellWidth+20;
+		var mouseY = e.pageY - this.offsetTop - topCellHeight -7;
+		{
+			if(paint){
+			addClick(mouseX, mouseY, true);
+			redraw();
+			}
 		}
 	}
 	
@@ -80,7 +128,7 @@
 		
 		context.save();
 		context.beginPath();
-		context.rect(50, 50, 510, 370);
+		context.rect(85, 72, 628, 365);
 		context.clip();
 					
 		for(var i=0; i < clickX.length; i++)
@@ -98,7 +146,12 @@
 			context.stroke();
 		}
 		context.restore();
-		context.drawImage(img_curtain, 0, 0);
+		//context.drawImage(img_curtain, 0, 0);
+		context.drawImage(img_paint_button, 725, 90);
+		context.drawImage(img_pictures_button, 725, 160);
+		context.drawImage(img_video_button, 725, 230);
+		context.drawImage(img_sound_button, 725, 300);
+		context.drawImage(img_pallette_buttons, 34, 90);
 	}
 	
 	// JavaScript Document
