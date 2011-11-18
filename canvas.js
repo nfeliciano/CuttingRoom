@@ -50,6 +50,65 @@
 		context.drawImage(img_pallette_buttons, 34, 90);
 
 	}
+	
+	function touchStart(event)
+	{
+		event.preventDefault();
+		var mouseX = event.touches[0].pageX - 12 - leftCellWidth+20;
+		var mouseY = event.touches[0].pageY - 0 - topCellHeight -45;
+		if (mouseX > 34 && mouseX < 80 && mouseY > 90 && mouseY < 150)
+		{
+			curColor = colorPurple;	
+		}
+		if (mouseX > 34 && mouseX < 80 && mouseY > 150 && mouseY < 197)
+		{
+			curColor = colorBlue;	
+		}
+		if (mouseX > 34 && mouseX < 80 && mouseY > 197 && mouseY < 244)
+		{
+			curColor = colorGreen;	
+		}
+		if (mouseX > 34 && mouseX < 80 && mouseY > 244 && mouseY < 291)
+		{
+			curColor = colorYellow;	
+		}
+		if (mouseX > 34 && mouseX < 80 && mouseY > 291 && mouseY < 338)
+		{
+			curColor = colorOrange;	
+		}
+		if (mouseX > 34 && mouseX < 80 && mouseY > 338 && mouseY < 385)
+		{
+			curColor = colorRed;	
+		}
+		else
+		{
+			paint = true;
+			addClick(mouseX, mouseY);
+			redraw();
+		}
+	}
+	function touchMove(event)
+	{
+		event.preventDefault();
+		var mouseX = event.touches[0].pageX - 12 - leftCellWidth+20;
+		var mouseY = event.touches[0].pageY - 0 - topCellHeight -45;
+		{
+			if(paint){
+			addClick(mouseX, mouseY, true);
+			redraw();
+			}
+		}
+	}
+    function touchEnd(event)
+	{
+		event.preventDefault();
+		paint = false;
+	}
+    function touchCancel(event)
+	{
+		event.preventDefault();
+		paint = false;
+	}
 
 	function mousedwn(e)
 	{

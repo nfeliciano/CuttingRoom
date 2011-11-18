@@ -29,8 +29,10 @@
 	-->
 </style>
 </head>
-
 <body onLoad="drawInitialFrame()">
+
+    
+
 <table width="1024" cellpadding="0" cellspacing="0" id="table">
   <tr>
     <td width="234" rowspan="3" class="cell" id="cellx">&nbsp;</td>
@@ -40,7 +42,11 @@
   </tr>
   <tr>
     <td colspan="3" class="canvasCell">
-    <canvas id="canvas" width="800" height="500"></canvas>
+    <canvas id="canvas" width="800" height="500"
+    ontouchstart="touchStart(event);"
+    ontouchmove="touchMove(event);"
+    ontouchend="touchEnd(event);"
+    ontouchcancel="touchCancel(event);"></canvas>
 	<script type="text/javascript" src="canvas.js"></script>
     <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
     </td>
@@ -50,5 +56,6 @@
  
   </tr>
 </table>
+</div>
 </body>
 </html>
