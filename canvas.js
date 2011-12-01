@@ -56,8 +56,57 @@
 		};
 	}
 	
+	function loadImage() {
+		//erase();
+		var random = Math.floor(Math.random()*23);
+		var img = new Image();
+		img.src = "imgs/myImage.png?" + random;
+		img.onload = function() {
+			context.drawImage(img, 0, 0);
+		};
+		context.strokeStyle = "#df4b26";
+		context.lineJoin = "round";
+		context.lineWidth = 5;
+		
+		context.save();
+		context.beginPath();
+		context.rect(85, 72, 628, 365);
+		context.clip();
+					
+		for(var i=0; i < clickX.length; i++)
+		{		
+			context.beginPath();
+			if(clickDrag[i] && i){
+			context.moveTo(clickX[i-1], clickY[i-1]);
+			}else{
+			context.moveTo(clickX[i]-1, clickY[i]);
+			}
+			context.lineTo(clickX[i], clickY[i]);
+			context.closePath();
+			context.strokeStyle = clickColor[i];
+			context.lineWidth = clickSize[i];
+			context.stroke();
+		}
+		context.restore();
+	}
+	
+	function erase() {
+		clickX = new Array();
+		clickY = new Array();
+		clickColor = new Array();
+		clickSize = new Array();
+		clickDrag = new Array();
+		canvas.width = canvas.width; // Clears the canvas
+		context.drawImage(img_paint_button, 725, 90);
+		context.drawImage(img_pictures_button, 725, 160);
+		context.drawImage(img_video_button, 725, 230);
+		context.drawImage(img_sound_button, 725, 300);
+		context.drawImage(img_pallette_buttons, 34, 90);
+	}
+	
 	function saveToServer()
 	{
+		
 		<!-- grab our drawing data from our myCanvas --> 
 		var myDrawing = document.getElementById("canvas");
 		<!-- start our datastring --> 
@@ -232,11 +281,11 @@
 		}
 		context.restore();
 		//context.drawImage(img_curtain, 0, 0);
-		/*context.drawImage(img_paint_button, 725, 90);
-		context.drawImage(img_pictures_button, 725, 160);
-		context.drawImage(img_video_button, 725, 230);
-		context.drawImage(img_sound_button, 725, 300);
-		context.drawImage(img_pallette_buttons, 34, 90);*/
+		//context.drawImage(img_paint_button, 725, 90);
+		//context.drawImage(img_pictures_button, 725, 160);
+		//context.drawImage(img_video_button, 725, 230);
+		//context.drawImage(img_sound_button, 725, 300);
+		//context.drawImage(img_pallette_buttons, 34, 90);
 	}
 	
 	// JavaScript Document
