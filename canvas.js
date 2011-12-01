@@ -34,8 +34,8 @@
 	
 	leftCellWidth = document.getElementById('cellx').getAttribute('width');
 	topCellHeight = document.getElementById('celly').getAttribute('height');
-	context = document.getElementById('canvas').getContext("2d");
 	canvas = document.getElementById('canvas');
+	context = canvas.getContext("2d");
 	canvas.addEventListener("mousedown", mousedwn, false);
 	canvas.addEventListener("mousemove", mousemov, false);
 	canvas.addEventListener("mouseup", mousup, false);
@@ -48,8 +48,34 @@
 		context.drawImage(img_video_button, 725, 230);
 		context.drawImage(img_sound_button, 725, 300);
 		context.drawImage(img_pallette_buttons, 34, 90);
-
+		
+		var img = new Image();
+		img.src = "imgs/myImage.png";
+		img.onload = function() {
+			context.drawImage(img, 0, 0);
+		};
 	}
+	
+	function saveToServer()
+	{
+		<!-- grab our drawing data from our myCanvas --> 
+		var myDrawing = document.getElementById("canvas");
+		<!-- start our datastring --> 
+		var drawingString = myDrawing.toDataURL("image/png");
+		var postData = "canvasData="+drawingString;	  
+		var ajax = new XMLHttpRequest();
+		<!-- specify our php processing page --> 
+		ajax.open("POST",'saveImage.php',true);
+		<!-- set the mime type so the image goes through as base64 --> 
+		ajax.setRequestHeader('Content-Type', 'canvas/upload');
+		ajax.onreadystatechange=function()
+		{
+			<!-- once the image data has been sent call a simple alert --> 
+			if (ajax.readyState == 4)
+			{ alert("image saved"); }
+		}
+		ajax.send(postData);
+	} 
 	
 	function touchStart(event)
 	{
@@ -179,7 +205,7 @@
 		
 	function redraw()
 	{
-		canvas.width = canvas.width; // Clears the canvas
+		//canvas.width = canvas.width; // Clears the canvas
 		
 		context.strokeStyle = "#df4b26";
 		context.lineJoin = "round";
@@ -190,7 +216,7 @@
 		context.rect(85, 72, 628, 365);
 		context.clip();
 					
-		for(var i=0; i < clickX.length; i++)
+		for(var i=clickX.length-1; i < clickX.length; i++)
 		{		
 			context.beginPath();
 			if(clickDrag[i] && i){
@@ -206,11 +232,11 @@
 		}
 		context.restore();
 		//context.drawImage(img_curtain, 0, 0);
-		context.drawImage(img_paint_button, 725, 90);
+		/*context.drawImage(img_paint_button, 725, 90);
 		context.drawImage(img_pictures_button, 725, 160);
 		context.drawImage(img_video_button, 725, 230);
 		context.drawImage(img_sound_button, 725, 300);
-		context.drawImage(img_pallette_buttons, 34, 90);
+		context.drawImage(img_pallette_buttons, 34, 90);*/
 	}
 	
 	// JavaScript Document
