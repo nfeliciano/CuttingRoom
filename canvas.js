@@ -84,9 +84,9 @@
 		var random = Math.floor(Math.random()*23);
 		var img = new Image();
 		if (fileName == "theGreatEscapeFrame0") {
-			img.src = "imgs/theGreatEscapeFrame0.png";
+			img.src = "imgs/theGreatEscapeFrame0.png?" + random;
 		} else if (fileName == "theGreatEscapeFrame1") {
-			img.src = "imgs/theGreatEscapeFrame1.png";
+			img.src = "imgs/theGreatEscapeFrame1.png?" + random;
 		}
 		img.onload = function() {
 			context.drawImage(img, 0, 0);
