@@ -36,7 +36,7 @@
 	var frameName = "Frame0";
 	var fileName = projectName + frameName;
 	
-	leftCellWidth = document.getElementById('cellx').getAttribute('width');
+	leftCellWidth = 0; //document.getElementById('cellx').getAttribute('width');
 	topCellHeight = document.getElementById('celly').getAttribute('height');
 	canvas = document.getElementById('canvas');
 	context = canvas.getContext("2d");
@@ -44,35 +44,70 @@
 	canvas.addEventListener("mousemove", mousemov, false);
 	canvas.addEventListener("mouseup", mousup, false);
 	
-	function switchFrames() {
-		if (fileName == "theGreatEscapeFrame0") {
-			frameName = "Frame1";
-			fileName = projectName + frameName;
-			erase();
-			loadImage();
-		} else {
-			frameName = "Frame0";
-			fileName = projectName + frameName;
-			erase();
-			loadImage();
-		}
+	function switchFrames(frName) 
+	{
+		frameName = frName;
+		fileName = projectName + frameName;
+		erase();
+		loadImage();
+	}
+	
+	function drawReelFrames()
+	{
+		var random = Math.floor(Math.random()*23);
+		
+		var imgFrame0 = new Image();
+		imgFrame0.src = "imgs/" + projectName + "Frame0.png?" + random;
+		imgFrame0.onload = function() {
+			context.drawImage(imgFrame0, 29, 7, 144, 86);
+		};
+		var imgFrame1 = new Image();
+		imgFrame1.src = "imgs/" + projectName + "Frame1.png?" + random;
+		imgFrame1.onload = function() {
+			context.drawImage(imgFrame1, 29, 99, 144, 86);
+		};
+		var imgFrame2 = new Image();
+		imgFrame2.src = "imgs/" + projectName + "Frame2.png?" + random;
+		imgFrame2.onload = function() {
+			context.drawImage(imgFrame2, 29, 193, 144, 86);
+		};
+		var imgFrame3 = new Image();
+		imgFrame3.src = "imgs/" + projectName + "Frame3.png?" + random;
+		imgFrame3.onload = function() {
+			context.drawImage(imgFrame3, 29, 286, 144, 86);
+		};
+		var imgFrame4 = new Image();
+		imgFrame4.src = "imgs/" + projectName + "Frame4.png?" + random;
+		imgFrame4.onload = function() {
+			context.drawImage(imgFrame4, 29, 379, 144, 86);
+		};
+		var imgFrame5 = new Image();
+		imgFrame5.src = "imgs/" + projectName + "Frame5.png?" + random;
+		imgFrame5.onload = function() {
+			context.drawImage(imgFrame5, 29, 471, 144, 86);
+		};
+		var imgFrame6 = new Image();
+		imgFrame6.src = "imgs/" + projectName + "Frame6.png?" + random;
+		imgFrame6.onload = function() {
+			context.drawImage(imgFrame6, 29, 565, 144, 86);
+		};
 	}
 	
 	function drawInitialFrame()
 	{
 		//context.drawImage(img_curtain, 0, 0);
-		context.drawImage(img_paint_button, 725, 90);	
-		context.drawImage(img_pictures_button, 725, 160);
-		context.drawImage(img_video_button, 725, 230);
-		context.drawImage(img_sound_button, 725, 300);
-		context.drawImage(img_pallette_buttons, 34, 90);
+		context.drawImage(img_paint_button, 937, 90);	
+		context.drawImage(img_pictures_button, 937, 160);
+		context.drawImage(img_video_button, 937, 230);
+		context.drawImage(img_sound_button, 937, 300);
+		context.drawImage(img_pallette_buttons, 246, 90);
+		
+		// draw the frames in the reel
+		drawReelFrames();
 		
 		var img = new Image();
-		if (fileName == "theGreatEscapeFrame0") {
-			img.src = "imgs/theGreatEscapeFrame0.png";
-		} else if (fileName == "theGreatEscapeFrame1") {
-			img.src = "imgs/theGreatEscapeFrame1.png";
-		}
+		var name = "imgs/" + projectName + frameName + ".png";
+		img.src = name;
 		
 		img.onload = function() {
 			context.drawImage(img, 0, 0);
@@ -82,12 +117,14 @@
 	function loadImage() {
 		//erase();
 		var random = Math.floor(Math.random()*23);
+		
+		// draw the frames in the reel
+		drawReelFrames();
+		
 		var img = new Image();
-		if (fileName == "theGreatEscapeFrame0") {
-			img.src = "imgs/theGreatEscapeFrame0.png?" + random;
-		} else if (fileName == "theGreatEscapeFrame1") {
-			img.src = "imgs/theGreatEscapeFrame1.png?" + random;
-		}
+		var name = "imgs/" + projectName + frameName + ".png?" + random;
+		img.src = name;
+		
 		img.onload = function() {
 			context.drawImage(img, 0, 0);
 		};
@@ -124,11 +161,11 @@
 		clickSize = new Array();
 		clickDrag = new Array();
 		canvas.width = canvas.width; // Clears the canvas
-		context.drawImage(img_paint_button, 725, 90);
-		context.drawImage(img_pictures_button, 725, 160);
-		context.drawImage(img_video_button, 725, 230);
-		context.drawImage(img_sound_button, 725, 300);
-		context.drawImage(img_pallette_buttons, 34, 90);
+		context.drawImage(img_paint_button, 937, 90);
+		context.drawImage(img_pictures_button, 937, 160);
+		context.drawImage(img_video_button, 937, 230);
+		context.drawImage(img_sound_button, 937, 300);
+		context.drawImage(img_pallette_buttons, 246, 90);
 	}
 	
 	function saveToServer()
@@ -156,29 +193,60 @@
 	function touchStart(event)
 	{
 		event.preventDefault();
-		var mouseX = event.touches[0].pageX - 12 - leftCellWidth+20;
-		var mouseY = event.touches[0].pageY - 0 - topCellHeight -45;
-		if (mouseX > 34 && mouseX < 80 && mouseY > 90 && mouseY < 150)
+		var mouseX = event.touches[0].pageX - leftCellWidth - 4;
+		var mouseY = event.touches[0].pageY - topCellHeight -20;
+		// frames
+		if (mouseX > 20 && mouseX < 185 && mouseY > 0 && mouseY < 94)
+		{
+			switchFrames("Frame0");	
+		}
+		else if (mouseX > 20 && mouseX < 185 && mouseY > 94 && mouseY < 187)
+		{
+			switchFrames("Frame1");
+		}
+		else if (mouseX > 20 && mouseX < 185 && mouseY > 189 && mouseY < 283)
+		{
+			switchFrames("Frame2");
+		}
+		else if (mouseX > 20 && mouseX < 185 && mouseY > 283 && mouseY < 374)
+		{
+			switchFrames("Frame3");
+		}
+		else if (mouseX > 20 && mouseX < 185 && mouseY > 374 && mouseY < 467)
+		{
+			switchFrames("Frame4");
+		}
+		else if (mouseX > 20 && mouseX < 185 && mouseY > 467 && mouseY < 560)
+		{
+			switchFrames("Frame5");
+		}
+		else if (mouseX > 20 && mouseX < 185 && mouseY > 560 && mouseY < 652)
+		{
+			switchFrames("Frame6");
+		}
+		
+		// paint pallette
+		if (mouseX > 246 && mouseX < 292 && mouseY > 90 && mouseY < 150)
 		{
 			curColor = colorPurple;	
 		}
-		if (mouseX > 34 && mouseX < 80 && mouseY > 150 && mouseY < 197)
+		if (mouseX > 246 && mouseX < 292 && mouseY > 150 && mouseY < 197)
 		{
 			curColor = colorBlue;	
 		}
-		if (mouseX > 34 && mouseX < 80 && mouseY > 197 && mouseY < 244)
+		if (mouseX > 246 && mouseX < 292 && mouseY > 197 && mouseY < 244)
 		{
 			curColor = colorGreen;	
 		}
-		if (mouseX > 34 && mouseX < 80 && mouseY > 244 && mouseY < 291)
+		if (mouseX > 246 && mouseX < 292 && mouseY > 244 && mouseY < 291)
 		{
 			curColor = colorYellow;	
 		}
-		if (mouseX > 34 && mouseX < 80 && mouseY > 291 && mouseY < 338)
+		if (mouseX > 246 && mouseX < 292 && mouseY > 291 && mouseY < 338)
 		{
 			curColor = colorOrange;	
 		}
-		if (mouseX > 34 && mouseX < 80 && mouseY > 338 && mouseY < 385)
+		if (mouseX > 246 && mouseX < 292 && mouseY > 338 && mouseY < 385)
 		{
 			curColor = colorRed;	
 		}
@@ -192,8 +260,8 @@
 	function touchMove(event)
 	{
 		event.preventDefault();
-		var mouseX = event.touches[0].pageX - 12 - leftCellWidth+20;
-		var mouseY = event.touches[0].pageY - 0 - topCellHeight -45;
+		var mouseX = event.touches[0].pageX - leftCellWidth - 4;
+		var mouseY = event.touches[0].pageY - topCellHeight -20;
 		{
 			if(paint){
 			addClick(mouseX, mouseY, true);
@@ -214,29 +282,60 @@
 
 	function mousedwn(e)
 	{
-		var mouseX = e.pageX - this.offsetLeft - leftCellWidth+20;
-		var mouseY = e.pageY - this.offsetTop - topCellHeight -7;
-		if (mouseX > 34 && mouseX < 80 && mouseY > 90 && mouseY < 150)
+		var mouseX = e.pageX - this.offsetLeft - leftCellWidth;
+		var mouseY = e.pageY - this.offsetTop - topCellHeight -15;
+		// frames
+		if (mouseX > 20 && mouseX < 185 && mouseY > 0 && mouseY < 94)
+		{
+			switchFrames("Frame0");	
+		}
+		else if (mouseX > 20 && mouseX < 185 && mouseY > 94 && mouseY < 189)
+		{
+			switchFrames("Frame1");
+		}
+		else if (mouseX > 20 && mouseX < 185 && mouseY > 189 && mouseY < 283)
+		{
+			switchFrames("Frame2");
+		}
+		else if (mouseX > 20 && mouseX < 185 && mouseY > 283 && mouseY < 374)
+		{
+			switchFrames("Frame3");
+		}
+		else if (mouseX > 20 && mouseX < 185 && mouseY > 374 && mouseY < 467)
+		{
+			switchFrames("Frame4");
+		}
+		else if (mouseX > 20 && mouseX < 185 && mouseY > 467 && mouseY < 560)
+		{
+			switchFrames("Frame5");
+		}
+		else if (mouseX > 20 && mouseX < 185 && mouseY > 560 && mouseY < 652)
+		{
+			switchFrames("Frame6");
+		}
+		
+		// paint pallette
+		if (mouseX > 246 && mouseX < 292 && mouseY > 90 && mouseY < 150)
 		{
 			curColor = colorPurple;	
 		}
-		if (mouseX > 34 && mouseX < 80 && mouseY > 150 && mouseY < 197)
+		if (mouseX > 246 && mouseX < 292 && mouseY > 150 && mouseY < 197)
 		{
 			curColor = colorBlue;	
 		}
-		if (mouseX > 34 && mouseX < 80 && mouseY > 197 && mouseY < 244)
+		if (mouseX > 246 && mouseX < 292 && mouseY > 197 && mouseY < 244)
 		{
 			curColor = colorGreen;	
 		}
-		if (mouseX > 34 && mouseX < 80 && mouseY > 244 && mouseY < 291)
+		if (mouseX > 246 && mouseX < 292 && mouseY > 244 && mouseY < 291)
 		{
 			curColor = colorYellow;	
 		}
-		if (mouseX > 34 && mouseX < 80 && mouseY > 291 && mouseY < 338)
+		if (mouseX > 246 && mouseX < 292 && mouseY > 291 && mouseY < 338)
 		{
 			curColor = colorOrange;	
 		}
-		if (mouseX > 34 && mouseX < 80 && mouseY > 338 && mouseY < 385)
+		if (mouseX > 246 && mouseX < 292 && mouseY > 338 && mouseY < 385)
 		{
 			curColor = colorRed;	
 		}
@@ -250,8 +349,8 @@
 	
 	function mousemov(e)
 	{
-		var mouseX = e.pageX - this.offsetLeft - leftCellWidth+20;
-		var mouseY = e.pageY - this.offsetTop - topCellHeight -7;
+		var mouseX = e.pageX - this.offsetLeft - leftCellWidth;
+		var mouseY = e.pageY - this.offsetTop - topCellHeight -15;
 		{
 			if(paint){
 			addClick(mouseX, mouseY, true);
@@ -289,7 +388,7 @@
 		
 		context.save();
 		context.beginPath();
-		context.rect(85, 72, 628, 365);
+		context.rect(297, 72, 628, 365);
 		context.clip();
 					
 		for(var i=clickX.length-1; i < clickX.length; i++)
