@@ -32,6 +32,10 @@
 	var img_pallette_buttons = new Image();
 	img_pallette_buttons.src = "paint-pallette.png";
 	
+	var projectName = "theGreatEscape";
+	var frameName = "Frame0";
+	var fileName = projectName + frameName;
+	
 	leftCellWidth = document.getElementById('cellx').getAttribute('width');
 	topCellHeight = document.getElementById('celly').getAttribute('height');
 	canvas = document.getElementById('canvas');
@@ -39,6 +43,20 @@
 	canvas.addEventListener("mousedown", mousedwn, false);
 	canvas.addEventListener("mousemove", mousemov, false);
 	canvas.addEventListener("mouseup", mousup, false);
+	
+	function switchFrames() {
+		if (fileName == "theGreatEscapeFrame0") {
+			frameName = "Frame1";
+			fileName = projectName + frameName;
+			erase();
+			loadImage();
+		} else {
+			frameName = "Frame0";
+			fileName = projectName + frameName;
+			erase();
+			loadImage();
+		}
+	}
 	
 	function drawInitialFrame()
 	{
@@ -50,7 +68,12 @@
 		context.drawImage(img_pallette_buttons, 34, 90);
 		
 		var img = new Image();
-		img.src = "imgs/myImage.png";
+		if (fileName == "theGreatEscapeFrame0") {
+			img.src = "imgs/theGreatEscapeFrame0.png";
+		} else if (fileName == "theGreatEscapeFrame1") {
+			img.src = "imgs/theGreatEscapeFrame1.png";
+		}
+		
 		img.onload = function() {
 			context.drawImage(img, 0, 0);
 		};
@@ -60,7 +83,11 @@
 		//erase();
 		var random = Math.floor(Math.random()*23);
 		var img = new Image();
-		img.src = "imgs/myImage.png?" + random;
+		if (fileName == "theGreatEscapeFrame0") {
+			img.src = "imgs/theGreatEscapeFrame0.png";
+		} else if (fileName == "theGreatEscapeFrame1") {
+			img.src = "imgs/theGreatEscapeFrame1.png";
+		}
 		img.onload = function() {
 			context.drawImage(img, 0, 0);
 		};
@@ -114,7 +141,7 @@
 		var postData = "canvasData="+drawingString;	  
 		var ajax = new XMLHttpRequest();
 		<!-- specify our php processing page --> 
-		ajax.open("POST",'saveImage.php',true);
+		ajax.open("POST",'saveImage.php?filename=' + fileName,true);
 		<!-- set the mime type so the image goes through as base64 --> 
 		ajax.setRequestHeader('Content-Type', 'canvas/upload');
 		ajax.onreadystatechange=function()
