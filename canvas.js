@@ -35,6 +35,7 @@
 	var projectName = "theGreatEscape";
 	var frameName = "Frame0";
 	var fileName = projectName + frameName;
+	var currentFrameNum = 0;
 	
 	leftCellWidth = 0; //document.getElementById('cellx').getAttribute('width');
 	topCellHeight = document.getElementById('celly').getAttribute('height');
@@ -46,15 +47,64 @@
 	
 	function switchFrames(frName) 
 	{
+		var toFrame;
+		if (frName == "Frame0") toFrame = 0;
+		if (frName == "Frame1") toFrame = 1;
+		if (frName == "Frame2") toFrame = 2;
+		if (frName == "Frame3") toFrame = 3;
+		if (frName == "Frame4") toFrame = 4;
+		if (frName == "Frame5") toFrame = 5;
+		if (frName == "Frame6") toFrame = 6;
+		var ajax = new XMLHttpRequest();
+		//0 for update, 1 for check
+		ajax.open("POST", 'framesUsed.php?updateOrCheck=' + 1 + '&lastFrame=' + currentFrameNum + '&toFrame=' + toFrame, true);
+		ajax.onreadystatechange=function() {
+			if (ajax.readyState == 4) {
+				//alert("switched to frame " + toFrame);
+			}
+		}
+		ajax.send();
 		frameName = frName;
 		fileName = projectName + frameName;
 		erase();
 		loadImage();
+		currentFrameNum = toFrame;
+	}
+	
+	function checkWhichFramesAreUsed()
+	{
+		checkIfFrameIsBeingUsed(0);
+		checkIfFrameIsBeingUsed(1);
+		checkIfFrameIsBeingUsed(2);
+		checkIfFrameIsBeingUsed(3);
+		checkIfFrameIsBeingUsed(4);
+		checkIfFrameIsBeingUsed(5);
+		checkIfFrameIsBeingUsed(6);
+	}
+	
+	function checkIfFrameIsBeingUsed(frameNum)
+	{
+		var ajax = new XMLHttpRequest();
+		//0 for update, 1 for check
+		ajax.open("POST", 'framesUsed.php?updateOrCheck=' + 0 + '&onFrameNumber=' + frameNum, true);
+		var isBeingUsed = 0;
+		ajax.onreadystatechange=function() {
+			if (ajax.readyState == 4) {
+				//1 if is being used, 0 if not
+				isBeingUsed = ajax.responseText;
+				if (isBeingUsed == 1) {
+					//this is where you might change the canvas color instead of alert
+					alert("frame " + frameNum + " is being used");	//CHANGETHIS
+				}
+			}
+		}
+		ajax.send();
+			
 	}
 	
 	function drawReelFrames()
 	{
-		var random = Math.floor(Math.random()*23);
+		var random = Math.floor(Math.random()*100);
 		
 		var imgFrame0 = new Image();
 		imgFrame0.src = "imgs/" + projectName + "Frame0.png?" + random;
@@ -112,11 +162,12 @@
 		img.onload = function() {
 			context.drawImage(img, 0, 0);
 		};
+		switchFrames("Frame0");
 	}
 	
 	function loadImage() {
 		//erase();
-		var random = Math.floor(Math.random()*23);
+		var random = Math.floor(Math.random()*100);
 		
 		// draw the frames in the reel
 		drawReelFrames();
