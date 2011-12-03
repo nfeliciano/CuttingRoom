@@ -45,6 +45,19 @@
 	canvas.addEventListener("mousemove", mousemov, false);
 	canvas.addEventListener("mouseup", mousup, false);
 	
+	window.onbeforeunload = exitPage;
+	
+	function exitPage() {
+		var ajax = new XMLHttpRequest();
+		ajax.open("POST", 'framesUsed.php?updateOrCheck=' + 1 + '&lastFrame=' + currentFrameNum + '&toFrame=8', true);
+		ajax.onreadystatechange=function() {
+			if (ajax.readyState == 4) {
+			
+			}
+		}
+		ajax.send();
+	}
+	
 	function switchFrames(frName) 
 	{
 		var toFrame;
@@ -86,7 +99,7 @@
 	{
 		var ajax = new XMLHttpRequest();
 		//0 for update, 1 for check
-		ajax.open("POST", 'framesUsed.php?updateOrCheck=' + 0 + '&onFrameNumber=' + frameNum, true);
+		ajax.open("POST", 'framesUsed.php?updateOrCheck=' + 0 + '&lastFrame=' + frameNum + '&toFrame=8', true);
 		var isBeingUsed = 0;
 		ajax.onreadystatechange=function() {
 			if (ajax.readyState == 4) {
