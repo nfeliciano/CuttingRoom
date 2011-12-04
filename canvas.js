@@ -112,12 +112,30 @@
 				isBeingUsed = ajax.responseText;
 				if (isBeingUsed == 1) {
 					//this is where you might change the canvas color instead of alert
-					alert("frame " + frameNum + " is being used");	//CHANGETHIS
+					//alert("frame " + frameNum + " is being used");	//CHANGETHIS
+					drawFrameIndicator( frameNum, colorRed, 5);
 				}
 			}
 		}
 		ajax.send();
 			
+	}
+	
+	var c = 0;
+	function timedCount()
+	{
+		drawFrameIndicator(c, colorRed, 5);
+		c=c+1;
+		t=setTimeout("timedCount()",1000);
+	}
+
+	function doTimer()
+	{
+		if (!timer_is_on)
+		{
+	  		timer_is_on=1;
+	  		timedCount();
+		}
 	}
 	
 	function drawReelFrames()
@@ -180,6 +198,27 @@
 		context.drawImage(img_pallette_buttons, 246, 90);
 	}
 	
+	function drawFrameIndicator(frameNum, color, width)
+	{
+		context.strokeStyle = color;
+		context.lineWidth = width;
+		context.linejoin = "miter";
+		
+		context.beginPath();
+		
+			context.moveTo(30, 7 + 93*frameNum);
+			context.lineTo(30, 90 + 93*frameNum);
+			context.lineTo(172, 90 + 93*frameNum);
+			context.lineTo(172, 7 + 93*frameNum);
+			context.lineTo(30, 7 + 93*frameNum);
+		
+		context.closePath();
+		context.stroke();
+		
+		context.lineJoin = "round";
+		context.lineWidth = 5;
+	}
+	
 	function drawMainCanvasImage()
 	{
 		var random = Math.floor(Math.random()*100);
@@ -204,9 +243,11 @@
 		// draw most recent save of canvas
 		drawMainCanvasImage();
 		
-		
 		// draw the frames in the reel
 		drawReelFrames();
+		
+		drawFrameIndicator(currentFrameNum, "green", 5);
+		drawFrameIndicator(5, "red", 3);
 		
 		// draw strokes not yet saved
 		context.strokeStyle = "#df4b26";
