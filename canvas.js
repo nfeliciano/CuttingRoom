@@ -32,6 +32,7 @@
 	img_pallette_buttons.src = "paint-pallette.png";
 	var img_canvas = new Image();
 	img_canvas.src = "canvas.jpg";
+	var drawing = false;
 	
 	var projectName = "theGreatEscape";
 	var frameName = "Frame0";
@@ -132,6 +133,7 @@
 			
 	}
 	
+	var timer_is_on = 0;
 	var c = 0;
 	function timedCount()
 	{
@@ -140,11 +142,28 @@
 		else
 			clearReelFrame(c-1);
 		drawFrameIndicator(c, colorRed, 5);
+		
+		// NOEL: The above is temporary code that moves the frame indicator and wipes the last frame each cycle.
+		//       Commented out below is something like what we want, I think.
+		/*
+		checkIfFrameIsBeingUsed(c); // < --- This draws the frame used indicator.
+		var frameVer;
+		if (c == 0) frameVer = newestVersionFrame0;
+		else if (c == 1) frameVer = newestVersionFrame1;
+		else if (c == 2) frameVer = newestVersionFrame2;
+		else if (c == 3) frameVer = newestVersionFrame3;
+		else if (c == 4) frameVer = newestVersionFrame4;
+		else if (c == 5) frameVer = newestVersionFrame5;
+		else if (c == 6) frameVer = newestVersionFrame6;
+		if (findFrameNewestVersion(c) != frameVer)
+			drawReelFrame(c);
+			*/
+			
 		if (c < 7) 
 			c=c+1;
 		else
 		 	c = 0;
-		t=setTimeout("timedCount()",1000);
+		t=setTimeout("timedCount()",1001);
 	}
 
 	function doTimer()
@@ -245,7 +264,6 @@
 		
 		// draw the frames in the reel 
 		drawReelFrame(currentFrameNum);
-
 		
 		// draw strokes not yet saved
 		context.strokeStyle = "#df4b26";
@@ -342,6 +360,7 @@
 	
 	function touchStart(event)
 	{
+		drawing = true;
 		event.preventDefault();
 		var mouseX = event.touches[0].pageX - leftCellWidth - 4;
 		var mouseY = event.touches[0].pageY - topCellHeight -20;
@@ -423,15 +442,18 @@
 	{
 		event.preventDefault();
 		paint = false;
+		drawing = false;
 	}
     function touchCancel(event)
 	{
 		event.preventDefault();
 		paint = false;
+		drawing = false;
 	}
 
 	function mousedwn(e)
 	{
+		drawing = true;
 		var mouseX = e.pageX - this.offsetLeft - leftCellWidth;
 		var mouseY = e.pageY - this.offsetTop - topCellHeight -15;
 		// frames
@@ -511,6 +533,7 @@
 	
 	function mousup(e)
 	{
+		drawing = false;
 		paint = false;
 	}
 	
