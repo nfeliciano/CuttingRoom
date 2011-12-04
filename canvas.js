@@ -80,13 +80,15 @@
 		}
 		ajax.send();
 		frameName = frName;
-		fileName = projectName + frameName;
+		fileName = projectName + frameName; 
 
-		clearCanvas(); 
-
-		erase();
-		loadImage();
 		currentFrameNum = toFrame;
+		clickX = new Array();
+		clickY = new Array();
+		clickColor = new Array();
+		clickSize = new Array();
+		clickDrag = new Array();
+		loadImage();
 	}
 	
 	function checkWhichFramesAreUsed()
@@ -124,8 +126,15 @@
 	var c = 0;
 	function timedCount()
 	{
+		if (c == 0)
+		 	clearReelFrame(6);
+		else
+			clearReelFrame(c-1);
 		drawFrameIndicator(c, colorRed, 5);
-		c=c+1;
+		if (c < 7) 
+			c=c+1;
+		else
+		 	c = 0;
 		t=setTimeout("timedCount()",1000);
 	}
 
@@ -138,45 +147,20 @@
 		}
 	}
 	
-	function drawReelFrames()
+	function drawReelFrame(num)
 	{
 		var random = Math.floor(Math.random()*100);
 		
-		var imgFrame0 = new Image();
-		imgFrame0.src = "imgs/" + projectName + "Frame0.png?" + random;
-		imgFrame0.onload = function() {
-			context.drawImage(imgFrame0, 297, 72, 630, 366, 30, 7, 142, 83);
+		var imgFrame = new Image();
+		imgFrame.src = "imgs/" + projectName + "Frame" + num + ".png?" + random;
+		imgFrame.onload = function() {
+			context.drawImage(imgFrame, 297, 72, 630, 366, 32, 9 + 93*num, 138, 81);
 		};
-		var imgFrame1 = new Image();
-		imgFrame1.src = "imgs/" + projectName + "Frame1.png?" + random;
-		imgFrame1.onload = function() {
-			context.drawImage(imgFrame1, 297, 72, 630, 366, 30, 100, 142, 83);
-		};
-		var imgFrame2 = new Image();
-		imgFrame2.src = "imgs/" + projectName + "Frame2.png?" + random;
-		imgFrame2.onload = function() {
-			context.drawImage(imgFrame2, 297, 72, 630, 366, 30, 193, 142, 83);
-		};
-		var imgFrame3 = new Image();
-		imgFrame3.src = "imgs/" + projectName + "Frame3.png?" + random;
-		imgFrame3.onload = function() {
-			context.drawImage(imgFrame3, 297, 72, 630, 366, 30, 285, 142, 83);
-		};
-		var imgFrame4 = new Image();
-		imgFrame4.src = "imgs/" + projectName + "Frame4.png?" + random;
-		imgFrame4.onload = function() {
-			context.drawImage(imgFrame4, 297, 72, 630, 366, 30, 379, 142, 83);
-		};
-		var imgFrame5 = new Image();
-		imgFrame5.src = "imgs/" + projectName + "Frame5.png?" + random;
-		imgFrame5.onload = function() {
-			context.drawImage(imgFrame5, 297, 72, 630, 366, 30, 471, 142, 83);
-		};
-		var imgFrame6 = new Image();
-		imgFrame6.src = "imgs/" + projectName + "Frame6.png?" + random;
-		imgFrame6.onload = function() {
-			context.drawImage(imgFrame6, 297, 72, 630, 366, 30, 565, 142, 83);
-		};
+	}
+	
+	function clearReelFrame(num)
+	{		
+		context.clearRect(20, 3 + 93*num, 164, 93);
 	}
 	
 	function drawInitialFrame()
@@ -184,9 +168,16 @@
 		clearCanvas();
 		
 		// draw the frames in the reel
-		drawReelFrames();
+		drawReelFrame(0);
+		drawReelFrame(1);
+		drawReelFrame(2);
+		drawReelFrame(3);
+		drawReelFrame(4);
+		drawReelFrame(5);
+		drawReelFrame(6);
 		
 		switchFrames("Frame0");
+		doTimer();
 	}
 	
 	function drawButtons()
@@ -244,10 +235,7 @@
 		drawMainCanvasImage();
 		
 		// draw the frames in the reel
-		drawReelFrames();
-		
-		drawFrameIndicator(currentFrameNum, "green", 5);
-		drawFrameIndicator(5, "red", 3);
+		drawReelFrame(currentFrameNum);
 		
 		// draw strokes not yet saved
 		context.strokeStyle = "#df4b26";
