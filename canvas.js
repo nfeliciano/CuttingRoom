@@ -36,7 +36,14 @@
 	var projectName = "theGreatEscape";
 	var frameName = "Frame0";
 	var fileName = projectName + frameName;
-	var currentFrameNum = 0;
+	var currentFrameNum = 8;
+	var newestVersionFrame0 = 0;
+	var newestVersionFrame1 = 0;
+	var newestVersionFrame2 = 0;
+	var newestVersionFrame3 = 0;
+	var newestVersionFrame4 = 0;
+	var newestVersionFrame5 = 0;
+	var newestVersionFrame6 = 0;
 	
 	leftCellWidth = 0; //document.getElementById('cellx').getAttribute('width');
 	topCellHeight = document.getElementById('celly').getAttribute('height');
@@ -91,6 +98,8 @@
 	
 	function checkWhichFramesAreUsed()
 	{
+		/*var blah = findFrameNewestVersion(currentFrameNum);
+		alert("this frame has been saved " + blah + " times");*/
 		checkIfFrameIsBeingUsed(0);
 		checkIfFrameIsBeingUsed(1);
 		checkIfFrameIsBeingUsed(2);
@@ -103,14 +112,14 @@
 	function checkIfFrameIsBeingUsed(frameNum)
 	{
 		var ajax = new XMLHttpRequest();
-		//0 for update, 1 for check
+		//0 for update, 1 for check, 2 for checkSave, 3 for addSave
 		ajax.open("POST", 'framesUsed.php?updateOrCheck=' + 0 + '&lastFrame=' + frameNum + '&toFrame=8', true);
 		var isBeingUsed = 0;
 		ajax.onreadystatechange=function() {
 			if (ajax.readyState == 4) {
 				//1 if is being used, 0 if not
 				isBeingUsed = ajax.responseText;
-				if (isBeingUsed == 1) {
+				if (isBeingUsed >= 1) {
 					//this is where you might change the canvas color instead of alert
 					//alert("frame " + frameNum + " is being used");	//CHANGETHIS
 					drawFrameIndicator( frameNum, colorRed, 5);
@@ -246,9 +255,6 @@
 		// draw the frames in the reel
 		drawReelFrames();
 		
-		drawFrameIndicator(currentFrameNum, "green", 5);
-		drawFrameIndicator(5, "red", 3);
-		
 		// draw strokes not yet saved
 		context.strokeStyle = "#df4b26";
 		context.lineJoin = "round";
@@ -285,14 +291,49 @@
 		context.drawImage(img_canvas, 298, 72);
 	}
 	
+	function findFrameNewestVersion(frNum)
+	{
+		var theNewestVersion;
+		var ajax = new XMLHttpRequest();
+		ajax.open("POST",'framesUsed.php?updateOrCheck=' + 2 + '&lastFrame=' + frNum + '&toFrame=8', false);
+		ajax.onreadystatechange=function()
+		{
+			if (ajax.readyState == 4) {
+				theNewestVersion = ajax.responseText;
+			}
+		}
+		ajax.send();
+		return theNewestVersion;
+	}
+	
+	function addToNewestVersion()
+	{
+		var ajax = new XMLHttpRequest();
+		ajax.open("POST",'framesUsed.php?updateOrCheck=' + 3 + '&lastFrame=' + currentFrameNum + '&toFrame=8', true);
+		ajax.onreadystatechange=function()
+		{
+			if (ajax.readyState == 4) {
+			
+			}
+		}
+		ajax.send();
+	}
+	
 	function saveToServer()
 	{
-		
 		<!-- grab our drawing data from our myCanvas --> 
 		var myDrawing = document.getElementById("canvas");
 		<!-- start our datastring --> 
 		var drawingString = myDrawing.toDataURL("image/png");
 		var postData = "canvasData="+drawingString;	  
+		addToNewestVersion();
+		if (currentFrameNum == 0) { newestVersionFrame0++; }
+		if (currentFrameNum == 1) { newestVersionFrame1++; }
+		if (currentFrameNum == 2) { newestVersionFrame2++; }
+		if (currentFrameNum == 3) { newestVersionFrame3++; }
+		if (currentFrameNum == 4) { newestVersionFrame4++; }
+		if (currentFrameNum == 5) { newestVersionFrame5++; }
+		if (currentFrameNum == 6) { newestVersionFrame6++; }
 		var ajax = new XMLHttpRequest();
 		<!-- specify our php processing page --> 
 		ajax.open("POST",'saveImage.php?filename=' + fileName,true);
