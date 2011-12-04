@@ -3,6 +3,7 @@
 	// canvas.py
 	//////////////////
 	
+	var initClear = false;
 	var leftCellWidth;
 	var topCellHeight;
 	var canvas;
@@ -31,6 +32,8 @@
 	img_sound_button.src = "sound-button.png";
 	var img_pallette_buttons = new Image();
 	img_pallette_buttons.src = "paint-pallette.png";
+	var img_canvas = new Image();
+	img_canvas.src = "canvas.jpg";
 	
 	var projectName = "theGreatEscape";
 	var frameName = "Frame0";
@@ -44,6 +47,7 @@
 	canvas.addEventListener("mousedown", mousedwn, false);
 	canvas.addEventListener("mousemove", mousemov, false);
 	canvas.addEventListener("mouseup", mousup, false);
+	canvas.width = canvas.width;
 	
 	window.onbeforeunload = exitPage;
 	
@@ -79,6 +83,9 @@
 		ajax.send();
 		frameName = frName;
 		fileName = projectName + frameName;
+
+		clearCanvas(); 
+
 		erase();
 		loadImage();
 		currentFrameNum = toFrame;
@@ -122,76 +129,88 @@
 		var imgFrame0 = new Image();
 		imgFrame0.src = "imgs/" + projectName + "Frame0.png?" + random;
 		imgFrame0.onload = function() {
-			context.drawImage(imgFrame0, 29, 7, 144, 86);
+			context.drawImage(imgFrame0, 297, 72, 630, 366, 30, 7, 142, 83);
 		};
 		var imgFrame1 = new Image();
 		imgFrame1.src = "imgs/" + projectName + "Frame1.png?" + random;
 		imgFrame1.onload = function() {
-			context.drawImage(imgFrame1, 29, 99, 144, 86);
+			context.drawImage(imgFrame1, 297, 72, 630, 366, 30, 100, 142, 83);
 		};
 		var imgFrame2 = new Image();
 		imgFrame2.src = "imgs/" + projectName + "Frame2.png?" + random;
 		imgFrame2.onload = function() {
-			context.drawImage(imgFrame2, 29, 193, 144, 86);
+			context.drawImage(imgFrame2, 297, 72, 630, 366, 30, 193, 142, 83);
 		};
 		var imgFrame3 = new Image();
 		imgFrame3.src = "imgs/" + projectName + "Frame3.png?" + random;
 		imgFrame3.onload = function() {
-			context.drawImage(imgFrame3, 29, 286, 144, 86);
+			context.drawImage(imgFrame3, 297, 72, 630, 366, 30, 285, 142, 83);
 		};
 		var imgFrame4 = new Image();
 		imgFrame4.src = "imgs/" + projectName + "Frame4.png?" + random;
 		imgFrame4.onload = function() {
-			context.drawImage(imgFrame4, 29, 379, 144, 86);
+			context.drawImage(imgFrame4, 297, 72, 630, 366, 30, 379, 142, 83);
 		};
 		var imgFrame5 = new Image();
 		imgFrame5.src = "imgs/" + projectName + "Frame5.png?" + random;
 		imgFrame5.onload = function() {
-			context.drawImage(imgFrame5, 29, 471, 144, 86);
+			context.drawImage(imgFrame5, 297, 72, 630, 366, 30, 471, 142, 83);
 		};
 		var imgFrame6 = new Image();
 		imgFrame6.src = "imgs/" + projectName + "Frame6.png?" + random;
 		imgFrame6.onload = function() {
-			context.drawImage(imgFrame6, 29, 565, 144, 86);
+			context.drawImage(imgFrame6, 297, 72, 630, 366, 30, 565, 142, 83);
 		};
 	}
 	
 	function drawInitialFrame()
 	{
-		//context.drawImage(img_curtain, 0, 0);
+		clearCanvas();
+		
+		// draw the frames in the reel
+		drawReelFrames();
+		
+		switchFrames("Frame0");
+	}
+	
+	function drawButtons()
+	{
 		context.drawImage(img_paint_button, 937, 90);	
 		context.drawImage(img_pictures_button, 937, 160);
 		context.drawImage(img_video_button, 937, 230);
 		context.drawImage(img_sound_button, 937, 300);
 		context.drawImage(img_pallette_buttons, 246, 90);
-		
-		// draw the frames in the reel
-		drawReelFrames();
-		
-		var img = new Image();
-		var name = "imgs/" + projectName + frameName + ".png";
-		img.src = name;
-		
-		img.onload = function() {
-			context.drawImage(img, 0, 0);
-		};
-		switchFrames("Frame0");
 	}
 	
-	function loadImage() {
-		//erase();
+	function drawMainCanvasImage()
+	{
 		var random = Math.floor(Math.random()*100);
-		
-		// draw the frames in the reel
-		drawReelFrames();
 		
 		var img = new Image();
 		var name = "imgs/" + projectName + frameName + ".png?" + random;
 		img.src = name;
 		
 		img.onload = function() {
-			context.drawImage(img, 0, 0);
+			context.drawImage(img, 297, 72, 630, 366, 297, 72, 630, 366);
 		};
+	}
+	
+	function clearCanvas()
+	{
+		canvas.width = canvas.width; // Clears the canvas
+		context.drawImage(img_canvas, 298, 72);
+		drawButtons();
+	}
+	
+	function loadImage() {
+		// draw most recent save of canvas
+		drawMainCanvasImage();
+		
+		
+		// draw the frames in the reel
+		drawReelFrames();
+		
+		// draw strokes not yet saved
 		context.strokeStyle = "#df4b26";
 		context.lineJoin = "round";
 		context.lineWidth = 5;
@@ -224,12 +243,7 @@
 		clickColor = new Array();
 		clickSize = new Array();
 		clickDrag = new Array();
-		canvas.width = canvas.width; // Clears the canvas
-		context.drawImage(img_paint_button, 937, 90);
-		context.drawImage(img_pictures_button, 937, 160);
-		context.drawImage(img_video_button, 937, 230);
-		context.drawImage(img_sound_button, 937, 300);
-		context.drawImage(img_pallette_buttons, 246, 90);
+		context.drawImage(img_canvas, 298, 72);
 	}
 	
 	function saveToServer()
@@ -318,7 +332,7 @@
 		{
 			paint = true;
 			addClick(mouseX, mouseY);
-			redraw();
+			draw();
 		}
 	}
 	function touchMove(event)
@@ -329,7 +343,7 @@
 		{
 			if(paint){
 			addClick(mouseX, mouseY, true);
-			redraw();
+			draw();
 			}
 		}
 	}
@@ -407,7 +421,7 @@
 		{
 			paint = true;
 			addClick(mouseX, mouseY);
-			redraw();
+			draw();
 		}
 	}
 	
@@ -418,7 +432,7 @@
 		{
 			if(paint){
 			addClick(mouseX, mouseY, true);
-			redraw();
+			draw();
 			}
 		}
 	}
@@ -442,9 +456,8 @@
 		clickSize.push(curSize);
 	}
 		
-	function redraw()
+	function draw()
 	{
-		//canvas.width = canvas.width; // Clears the canvas
 		
 		context.strokeStyle = "#df4b26";
 		context.lineJoin = "round";
@@ -470,12 +483,6 @@
 			context.stroke();
 		}
 		context.restore();
-		//context.drawImage(img_curtain, 0, 0);
-		//context.drawImage(img_paint_button, 725, 90);
-		//context.drawImage(img_pictures_button, 725, 160);
-		//context.drawImage(img_video_button, 725, 230);
-		//context.drawImage(img_sound_button, 725, 300);
-		//context.drawImage(img_pallette_buttons, 34, 90);
 	}
 	
 	// JavaScript Document
