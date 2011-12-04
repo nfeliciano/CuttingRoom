@@ -245,6 +245,7 @@
 		
 		// draw the frames in the reel 
 		drawReelFrame(currentFrameNum);
+
 		
 		// draw strokes not yet saved
 		context.strokeStyle = "#df4b26";
