@@ -1,5 +1,6 @@
 <?php
 $con = mysql_connect("localhost","instinct_noel","cuttingRoom");
+//instinct_noel, cuttingRoom
 if (!$con)
   {
   die('Could not connect: ' . mysql_error());
@@ -23,10 +24,46 @@ if ($updateOrCheck=="1") {
 	$fromFrame = $_GET['lastFrame'];
 	$toFrame = $_GET['toFrame'];
 	
-	mysql_query("UPDATE framesUsed SET used = '0' WHERE frame = '".$fromFrame."'");
+	$result = mysql_query("SELECT * FROM framesUsed WHERE frame='".$fromFrame."'");
+	$fromFrameSavedCounter;
+	while($row = mysql_fetch_array($result)) {
+		if ($fromFrame > "6") { break; }
+		$fromFrameSavedCounter = $row['used'];
+		$fromFrameSavedCounter--;
+	}
 	
-	if ($toFrame <= "6") { mysql_query("UPDATE framesUsed SET used = '1' WHERE frame = '".$toFrame."'"); }
+	mysql_query("UPDATE framesUsed SET used = '".$fromFrameSavedCounter."' WHERE frame = '".$fromFrame."'");
 	
+	if ($toFrame <= "6") { 
+		$result = mysql_query("SELECT * FROM framesUsed WHERE frame='".$toFrame."'");
+		$toFrameSavedCounter;
+		while($row = mysql_fetch_array($result)) {
+			$toFrameSavedCounter = $row['used'];
+			$toFrameSavedCounter++;
+		}
+		mysql_query("UPDATE framesUsed SET used = '".$toFrameSavedCounter."' WHERE frame = '".$toFrame."'"); 
+	}
+}
+
+if ($updateOrCheck=="2") {
+//check for newest version
+	$thisFrame = $_GET['lastFrame'];
+	$result = mysql_query("SELECT * FROM framesUsed WHERE frame='".$thisFrame."'");
+	while($row = mysql_fetch_array($result)) {
+		echo $row['newestVersion'];
+	}
+}
+
+if ($updateOrCheck=="3") {
+//update newest version
+	$thisFrame = $_GET['lastFrame'];
+	$result = mysql_query("SELECT * FROM framesUsed WHERE frame='".$thisFrame."'");
+	$newestVersion;
+	while($row = mysql_fetch_array($result)) {
+		$newestVersion = $row['newestVersion'];
+		$newestVersion++;
+	}
+	mysql_query("UPDATE framesUsed SET newestVersion = '".$newestVersion."' WHERE frame = '".$thisFrame."'");
 }
 
 mysql_close($con);
