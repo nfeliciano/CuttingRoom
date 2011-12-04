@@ -20,16 +20,14 @@
 	var clickColor = new Array();
 	var clickSize = new Array();
 	var curSize = "normal";
-	var img_curtain = new Image();
-	img_curtain.src = "curtain.png";
 	var img_paint_button = new Image();
-	img_paint_button.src = "paint-button.png";
+	img_paint_button.src = "D_assets/paint-button.png";
 	var img_pictures_button = new Image();
-	img_pictures_button.src = "pictures-button.png";
+	img_pictures_button.src = "D_assets/pictures-button.png";
 	var img_video_button = new Image();
-	img_video_button.src = "video-button.png";
+	img_video_button.src = "D_assets/video-button.png";
 	var img_sound_button = new Image();
-	img_sound_button.src = "sound-button.png";
+	img_sound_button.src = "D_assets/sound-button.png";
 	var img_pallette_buttons = new Image();
 	img_pallette_buttons.src = "paint-pallette.png";
 	var img_canvas = new Image();
@@ -175,10 +173,10 @@
 	
 	function drawButtons()
 	{
-		context.drawImage(img_paint_button, 937, 90);	
-		context.drawImage(img_pictures_button, 937, 160);
-		context.drawImage(img_video_button, 937, 230);
-		context.drawImage(img_sound_button, 937, 300);
+		context.drawImage(img_paint_button, 937, 105);	
+		context.drawImage(img_pictures_button, 937, 175);
+		context.drawImage(img_video_button, 937, 245);
+		context.drawImage(img_sound_button, 937, 315);
 		context.drawImage(img_pallette_buttons, 246, 90);
 	}
 	
