@@ -151,33 +151,36 @@
 		// NOEL: The above is temporary code that moves the frame indicator and wipes the last frame each cycle.
 		//       Commented out below is something like what we want, I think.
 		
-		checkIfFrameIsBeingUsed(c); // < --- This draws the frame used indicator.
-		var frameVer;
-		if (c == 0) frameVer = newestVersionFrame0;
-		else if (c == 1) frameVer = newestVersionFrame1;
-		else if (c == 2) frameVer = newestVersionFrame2;
-		else if (c == 3) frameVer = newestVersionFrame3;
-		else if (c == 4) frameVer = newestVersionFrame4;
-		else if (c == 5) frameVer = newestVersionFrame5;
-		else if (c == 6) frameVer = newestVersionFrame6;
-		if (findFrameNewestVersion(c) != frameVer) {
-			clearReelFrame(c);
-			drawReelFrame(c);
-			frameVer = findFrameNewestVersion(c);
-			if (c == 0) newestVersionFrame0 = frameVer;
-			else if (c == 1) newestVersionFrame1 = frameVer;
-			else if (c == 2) newestVersionFrame2 = frameVer;
-			else if (c == 3) newestVersionFrame3 = frameVer;
-			else if (c == 4) newestVersionFrame4 = frameVer;
-			else if (c == 5) newestVersionFrame5 = frameVer;
-			else if (c == 6) newestVersionFrame6 = frameVer;
+		if (!drawing)
+		{
+			checkIfFrameIsBeingUsed(c); // < --- This draws the frame used indicator.
+			var frameVer;
+			if (c == 0) frameVer = newestVersionFrame0;
+			else if (c == 1) frameVer = newestVersionFrame1;
+			else if (c == 2) frameVer = newestVersionFrame2;
+			else if (c == 3) frameVer = newestVersionFrame3;
+			else if (c == 4) frameVer = newestVersionFrame4;
+			else if (c == 5) frameVer = newestVersionFrame5;
+			else if (c == 6) frameVer = newestVersionFrame6;
+			if (findFrameNewestVersion(c) != frameVer) {
+				clearReelFrame(c);
+				drawReelFrame(c);
+				frameVer = findFrameNewestVersion(c);
+				if (c == 0) newestVersionFrame0 = frameVer;
+				else if (c == 1) newestVersionFrame1 = frameVer;
+				else if (c == 2) newestVersionFrame2 = frameVer;
+				else if (c == 3) newestVersionFrame3 = frameVer;
+				else if (c == 4) newestVersionFrame4 = frameVer;
+				else if (c == 5) newestVersionFrame5 = frameVer;
+				else if (c == 6) newestVersionFrame6 = frameVer;
+			}
+				
+			if (c < 7) 
+				c=c+1;
+			else
+			 	c = 0;
 		}
-			
-			
-		if (c < 7) 
-			c=c+1;
-		else
-		 	c = 0;
+	
 		t=setTimeout("timedCount()",501);
 	}
 
