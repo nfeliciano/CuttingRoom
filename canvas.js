@@ -71,6 +71,11 @@
 	
 	function switchFrames(frName) 
 	{
+		if (checkIfFrameIsLocked(currentFrameNum) == '1') {
+			alert("Unlock frame before leaving!");
+			return;
+		}
+		loadChat();
 		var toFrame;
 		if (frName == "Frame0") toFrame = 0;
 		if (frName == "Frame1") toFrame = 1;
@@ -81,6 +86,9 @@
 		if (frName == "Frame6") toFrame = 6;
 		drawFrameIndicator( currentFrameNum, colorBlack, 5);
 		drawFrameIndicator( toFrame, colorRed, 5);
+		if (checkIfFrameIsLocked(toFrame) == '1') {
+			drawFrameIndicator( toFrame, colorPurple, 5);
+		}
 		var ajax = new XMLHttpRequest();
 		//0 for update, 1 for check
 		ajax.open("POST", 'framesUsed.php?updateOrCheck=' + 1 + '&lastFrame=' + currentFrameNum + '&toFrame=' + toFrame, true);
@@ -94,6 +102,7 @@
 		fileName = projectName + frameName; 
 
 		currentFrameNum = toFrame;
+		loadDescription();
 		clickX = new Array();
 		clickY = new Array();
 		clickColor = new Array();
@@ -128,7 +137,11 @@
 				if (isBeingUsed >= 1) {
 					//this is where you might change the canvas color instead of alert
 					//alert("frame " + frameNum + " is being used");	//CHANGETHIS
-					drawFrameIndicator( frameNum, colorRed, 5);
+					if (checkIfFrameIsLocked(frameNum) == '1') {
+						drawFrameIndicator( frameNum, colorPurple, 5);
+					} else {
+						drawFrameIndicator( frameNum, colorRed, 5);
+					}
 				} else {
 					drawFrameIndicator( frameNum, colorBlack, 5);
 				}
@@ -151,6 +164,8 @@
 		// NOEL: The above is temporary code that moves the frame indicator and wipes the last frame each cycle.
 		//       Commented out below is something like what we want, I think.
 		
+		loadChat();
+		
 		if (!drawing)
 		{
 			checkIfFrameIsBeingUsed(c); // < --- This draws the frame used indicator.
@@ -163,7 +178,6 @@
 			else if (c == 5) frameVer = newestVersionFrame5;
 			else if (c == 6) frameVer = newestVersionFrame6;
 			if (findFrameNewestVersion(c) != frameVer) {
-				clearReelFrame(c);
 				drawReelFrame(c);
 				frameVer = findFrameNewestVersion(c);
 				if (c == 0) newestVersionFrame0 = frameVer;
@@ -181,7 +195,7 @@
 			 	c = 0;
 		}
 	
-		t=setTimeout("timedCount()",501);
+		t=setTimeout("timedCount()",1001);
 	}
 
 	function doTimer()
@@ -219,6 +233,23 @@
 		drawFrameIndicator( 4, colorBlack, 5);
 		drawFrameIndicator( 5, colorBlack, 5);
 		drawFrameIndicator( 6, colorBlack, 5);
+		if (checkIfFrameIsLocked(0) == '1') {
+			drawFrameIndicator( 0, colorPurple, 5);
+		} else if (checkIfFrameIsLocked(1) == '1') {
+			drawFrameIndicator( 1, colorPurple, 5);
+		} else if (checkIfFrameIsLocked(2) == '1') {
+			drawFrameIndicator( 2, colorPurple, 5);
+		} else if (checkIfFrameIsLocked(3) == '1') {
+			drawFrameIndicator( 3, colorPurple, 5);
+		} else if (checkIfFrameIsLocked(4) == '1') {
+			drawFrameIndicator( 4, colorPurple, 5);
+		} else if (checkIfFrameIsLocked(5) == '1') {
+			drawFrameIndicator( 5, colorPurple, 5);
+		} else if (checkIfFrameIsLocked(6) == '1') {
+			drawFrameIndicator( 6, colorPurple, 5);
+		} else if (checkIfFrameIsLocked(7) == '1') {
+			drawFrameIndicator( 7, colorPurple, 5);
+		}
 		
 		// draw the frames in the reel
 		drawReelFrame(0);
@@ -229,6 +260,7 @@
 		drawReelFrame(5);
 		drawReelFrame(6);
 		
+		loadChat();
 		switchFrames("Frame0");
 		doTimer();
 	}
@@ -360,7 +392,8 @@
 		var myDrawing = document.getElementById("canvas");
 		<!-- start our datastring --> 
 		var drawingString = myDrawing.toDataURL("image/png");
-		var postData = "canvasData="+drawingString;	  
+		var postData = "canvasData="+drawingString;	
+		loadChat();
 		addToNewestVersion();
 		if (currentFrameNum == 0) { newestVersionFrame0++; }
 		if (currentFrameNum == 1) { newestVersionFrame1++; }
@@ -378,10 +411,12 @@
 		{
 			<!-- once the image data has been sent call a simple alert --> 
 			if (ajax.readyState == 4)
-			{ alert("image saved"); 
-			clearReelFrame(currentFrameNum);
+			{ alert("image saved");
 			drawReelFrame(currentFrameNum);
 			drawFrameIndicator( currentFrameNum, colorRed, 5);}
+			if (checkIfFrameIsLocked(currentFrameNum) == '1') {
+				drawFrameIndicator( currentFrameNum, colorPurple, 5);
+			}
 		}
 		ajax.send(postData);
 	} 
@@ -563,6 +598,8 @@
 	{
 		drawing = false;
 		paint = false;
+		loadChat();	//should this be here or is it too taxing?
+		loadDescription();	//better here than in timedcount
 	}
 	
 	var clickX = new Array();
@@ -606,6 +643,80 @@
 			context.stroke();
 		}
 		context.restore();
+	}
+	
+	function lockFrame() {
+		var ajax = new XMLHttpRequest();
+		ajax.open("POST", 'framesUsed.php?updateOrCheck=' + 4 + '&lastFrame=' + currentFrameNum + '&toFrame=8', true);
+		ajax.onreadystatechange=function() {
+			if (ajax.readyState == 4) {
+				if (checkIfFrameIsLocked(currentFrameNum) == '1') {
+					drawFrameIndicator( currentFrameNum, colorPurple, 5);
+				} else {
+					drawFrameIndicator( currentFrameNum, colorRed, 5);
+				}
+			}
+		}
+		ajax.send();
+	}
+	
+	function checkIfFrameIsLocked(frNum) {
+		var ajax = new XMLHttpRequest();
+		var isFrameLocked;
+		ajax.open("POST", 'framesUsed.php?updateOrCheck=' + 5 + '&lastFrame=' + frNum + '&toFrame=8', false);
+		ajax.onreadystatechange=function() {
+			if (ajax.readyState == 4) {
+				isFrameLocked = ajax.responseText;
+			}
+		}
+		ajax.send();
+		return isFrameLocked;
+	}
+	
+	function setDescription() {
+		var ajax = new XMLHttpRequest();
+		ajax.open("POST", 'framesUsed.php?updateOrCheck=' + 6 + '&lastFrame=' + currentFrameNum + '&toFrame=' + document.frameForm.desc.value, true);
+		ajax.onreadystatechange=function() {
+			if (ajax.readyState == 4) {
+				
+			}
+		}
+		ajax.send();
+	}
+	
+	function loadDescription() {
+		var ajax = new XMLHttpRequest();
+		ajax.open("POST", 'framesUsed.php?updateOrCheck=' + 7 + '&lastFrame=' + currentFrameNum + '&toFrame=8', true);
+		ajax.onreadystatechange=function() {
+			if (ajax.readyState == 4) {
+				document.frameForm.desc.value=ajax.responseText;
+			}
+		}
+		ajax.send();
+	}
+	
+	function loadChat() {
+		var ajax = new XMLHttpRequest();
+		ajax.open("POST", 'chat.php?author=10101&comment=NULL', true);
+		ajax.onreadystatechange=function() {
+			if (ajax.readyState == 4) {
+				document.getElementById("chatMessages").innerHTML=ajax.responseText;
+			}
+		}
+		ajax.send();
+	}
+	
+	function submitChat() {
+		var ajax = new XMLHttpRequest();
+		var auth = document.chatForm.person.value;
+		var comm = document.chatForm.comment.value;
+		ajax.open("POST", 'chat.php?author=' + auth + '&comment=' + comm, true);
+		ajax.onreadystatechange=function() {
+			if (ajax.readyState == 4) {
+				loadChat();
+			}
+		}
+		ajax.send();
 	}
 	
 	// JavaScript Document

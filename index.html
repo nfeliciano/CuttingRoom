@@ -44,18 +44,30 @@ body {
   <tr>
     <td width="231" height="20" class="headerCell1" id="celly"><button onClick="saveToServer();">Save Frame</button></td>
     <td width="310" class="headerCell2">&nbsp;<button onClick="erase();">Erase</button>&nbsp;<button onClick="loadImage();">Load Frame</button>
-   <button onClick="checkWhichFramesAreUsed();">Check Frames</button>
+   <button onClick="lockFrame();">Lock/Unlock</button>
    </td>
     <td width="278" class="headerCell2">&nbsp;</td>
   </tr>
   <tr>
     <td colspan="3" class="canvasCell">
+    <form name='frameForm' style="position:absolute; left:320px; top:60px;" action="javascript:setDescription()" method="post">
+    Frame Description:
+    <input type='text' name='desc' style="width:400px;" />
+    <input type="submit" />
+    </form>
     <canvas id="canvas" width="1024" height="623"
     ontouchstart="touchStart(event);"
     ontouchmove="touchMove(event);"
     ontouchend="touchEnd(event);"
     ontouchcancel="touchCancel(event);"></canvas>
 	<script type="text/javascript" src="canvas.js"></script>
+	<div id="chatMessages" style="position:absolute; top:540px; left: 300px;"><b></b></div>
+	<form name='chatForm' action="javascript:submitChat()" method="post" style="position:absolute; top:620px; left:200px;">
+   		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name: <input type="text" name="person" style="width:80px;" />
+   		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   		Comment: <input type="text" name="comment" style="width:300px;" />
+    	<input type="submit" />
+   	</form>
     </td>
   </tr>
   <tr>
