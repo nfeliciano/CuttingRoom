@@ -1,12 +1,12 @@
 <?php
-$con = mysql_connect("localhost","instinct_noel","cuttingRoom");
+$con = mysql_connect("localhost","root","root");
 //instinct_noel, cuttingRoom
 if (!$con)
   {
   die('Could not connect: ' . mysql_error());
   }
 
-mysql_select_db("instinct_cr_db", $con);
+mysql_select_db("cr_db", $con);
 
 $updateOrCheck = $_GET['updateOrCheck'];
 if ($updateOrCheck=="0") {

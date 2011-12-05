@@ -10,6 +10,7 @@
 	var context;
 	var padding = 25;
 	var lineWidth = 8;
+	var colorBlack = "#000000";
 	var colorRed = "#f23021";
 	var colorPurple = "#9330b0";
 	var colorGreen = "#5ba63e";
@@ -38,13 +39,13 @@
 	var frameName = "Frame0";
 	var fileName = projectName + frameName;
 	var currentFrameNum = 8;
-	var newestVersionFrame0 = 0;
-	var newestVersionFrame1 = 0;
-	var newestVersionFrame2 = 0;
-	var newestVersionFrame3 = 0;
-	var newestVersionFrame4 = 0;
-	var newestVersionFrame5 = 0;
-	var newestVersionFrame6 = 0;
+	var newestVersionFrame0 = findFrameNewestVersion(0);
+	var newestVersionFrame1 = findFrameNewestVersion(1);
+	var newestVersionFrame2 = findFrameNewestVersion(2);
+	var newestVersionFrame3 = findFrameNewestVersion(3);
+	var newestVersionFrame4 = findFrameNewestVersion(4);
+	var newestVersionFrame5 = findFrameNewestVersion(5);
+	var newestVersionFrame6 = findFrameNewestVersion(6);
 	
 	leftCellWidth = 0; //document.getElementById('cellx').getAttribute('width');
 	topCellHeight = document.getElementById('celly').getAttribute('height');
@@ -78,6 +79,8 @@
 		if (frName == "Frame4") toFrame = 4;
 		if (frName == "Frame5") toFrame = 5;
 		if (frName == "Frame6") toFrame = 6;
+		drawFrameIndicator( currentFrameNum, colorBlack, 5);
+		drawFrameIndicator( toFrame, colorRed, 5);
 		var ajax = new XMLHttpRequest();
 		//0 for update, 1 for check
 		ajax.open("POST", 'framesUsed.php?updateOrCheck=' + 1 + '&lastFrame=' + currentFrameNum + '&toFrame=' + toFrame, true);
@@ -126,6 +129,8 @@
 					//this is where you might change the canvas color instead of alert
 					//alert("frame " + frameNum + " is being used");	//CHANGETHIS
 					drawFrameIndicator( frameNum, colorRed, 5);
+				} else {
+					drawFrameIndicator( frameNum, colorBlack, 5);
 				}
 			}
 		}
@@ -137,15 +142,15 @@
 	var c = 0;
 	function timedCount()
 	{
-		if (c == 0)
+		/*if (c == 0)
 		 	clearReelFrame(6);
 		else
 			clearReelFrame(c-1);
-		drawFrameIndicator(c, colorRed, 5);
+		drawFrameIndicator(c, colorRed, 5);*/
 		
 		// NOEL: The above is temporary code that moves the frame indicator and wipes the last frame each cycle.
 		//       Commented out below is something like what we want, I think.
-		/*
+		
 		checkIfFrameIsBeingUsed(c); // < --- This draws the frame used indicator.
 		var frameVer;
 		if (c == 0) frameVer = newestVersionFrame0;
@@ -155,15 +160,25 @@
 		else if (c == 4) frameVer = newestVersionFrame4;
 		else if (c == 5) frameVer = newestVersionFrame5;
 		else if (c == 6) frameVer = newestVersionFrame6;
-		if (findFrameNewestVersion(c) != frameVer)
+		if (findFrameNewestVersion(c) != frameVer) {
+			clearReelFrame(c);
 			drawReelFrame(c);
-			*/
+			frameVer = findFrameNewestVersion(c);
+			if (c == 0) newestVersionFrame0 = frameVer;
+			else if (c == 1) newestVersionFrame1 = frameVer;
+			else if (c == 2) newestVersionFrame2 = frameVer;
+			else if (c == 3) newestVersionFrame3 = frameVer;
+			else if (c == 4) newestVersionFrame4 = frameVer;
+			else if (c == 5) newestVersionFrame5 = frameVer;
+			else if (c == 6) newestVersionFrame6 = frameVer;
+		}
+			
 			
 		if (c < 7) 
 			c=c+1;
 		else
 		 	c = 0;
-		t=setTimeout("timedCount()",1001);
+		t=setTimeout("timedCount()",501);
 	}
 
 	function doTimer()
@@ -194,6 +209,13 @@
 	function drawInitialFrame()
 	{
 		clearCanvas();
+		drawFrameIndicator( 0, colorBlack, 5);
+		drawFrameIndicator( 1, colorBlack, 5);
+		drawFrameIndicator( 2, colorBlack, 5);
+		drawFrameIndicator( 3, colorBlack, 5);
+		drawFrameIndicator( 4, colorBlack, 5);
+		drawFrameIndicator( 5, colorBlack, 5);
+		drawFrameIndicator( 6, colorBlack, 5);
 		
 		// draw the frames in the reel
 		drawReelFrame(0);
@@ -353,7 +375,10 @@
 		{
 			<!-- once the image data has been sent call a simple alert --> 
 			if (ajax.readyState == 4)
-			{ alert("image saved"); }
+			{ alert("image saved"); 
+			clearReelFrame(currentFrameNum);
+			drawReelFrame(currentFrameNum);
+			drawFrameIndicator( currentFrameNum, colorRed, 5);}
 		}
 		ajax.send(postData);
 	} 
