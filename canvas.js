@@ -33,6 +33,8 @@
 	img_pallette_buttons.src = "paint-pallette.png";
 	var img_canvas = new Image();
 	img_canvas.src = "canvas.jpg";
+	var img_playButton = new Image();
+	img_playButton.src = "Play_button.png";
 	var drawing = false;
 	
 	var projectName = "theGreatEscape";
@@ -272,6 +274,7 @@
 		context.drawImage(img_video_button, 937, 245);
 		context.drawImage(img_sound_button, 937, 315);
 		context.drawImage(img_pallette_buttons, 246, 90);
+		context.drawImage(img_playButton, 213, 7);
 	}
 	
 	function drawFrameIndicator(frameNum, color, width)
@@ -295,7 +298,7 @@
 		context.lineWidth = 5;
 	}
 	
-	function drawMainCanvasImage()
+	function MainCanvasImage()
 	{
 		var random = Math.floor(Math.random()*100);
 		
@@ -317,36 +320,44 @@
 	
 	function loadImage() {
 		// draw most recent save of canvas
-		drawMainCanvasImage();
+		var random = Math.floor(Math.random()*100);
 		
-		// draw the frames in the reel 
-		drawReelFrame(currentFrameNum);
+		var img = new Image();
+		var name = "imgs/" + projectName + frameName + ".png?" + random;
+		img.src = name;
 		
-		// draw strokes not yet saved
-		context.strokeStyle = "#df4b26";
-		context.lineJoin = "round";
-		context.lineWidth = 5;
+		img.onload = function() {
+			context.drawImage(img, 297, 72, 630, 366, 297, 72, 630, 366);
+			// draw the frames in the reel 
+			drawReelFrame(currentFrameNum);
+			// draw strokes not yet saved
+			context.strokeStyle = "#df4b26";
+			context.lineJoin = "round";
+			context.lineWidth = 5;
 		
-		context.save();
-		context.beginPath();
-		context.rect(85, 72, 628, 365);
-		context.clip();
-					
-		for(var i=0; i < clickX.length; i++)
-		{		
+			context.save();
 			context.beginPath();
-			if(clickDrag[i] && i){
-			context.moveTo(clickX[i-1], clickY[i-1]);
-			}else{
-			context.moveTo(clickX[i]-1, clickY[i]);
+			context.rect(85, 72, 628, 365);
+			context.clip();
+						
+			for(var i=0; i < clickX.length; i++)
+			{		
+				context.beginPath();
+				if(clickDrag[i] && i){
+				context.moveTo(clickX[i-1], clickY[i-1]);
+				}else{
+				context.moveTo(clickX[i]-1, clickY[i]);
+				}
+				context.lineTo(clickX[i], clickY[i]);
+				context.closePath();
+				context.strokeStyle = clickColor[i];
+				context.lineWidth = clickSize[i];
+				context.stroke();
 			}
-			context.lineTo(clickX[i], clickY[i]);
-			context.closePath();
-			context.strokeStyle = clickColor[i];
-			context.lineWidth = clickSize[i];
-			context.stroke();
-		}
-		context.restore();
+			context.restore();
+		};
+		
+		
 	}
 	
 	function erase() {
