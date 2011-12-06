@@ -38,6 +38,7 @@
 	var img_lockButton = new Image();
 	img_lockButton.src = "Sm_lock.png";
 	var drawing = false;
+	var play = false;
 	
 	var projectName = "theGreatEscape";
 	var frameName = "Frame0";
@@ -169,37 +170,70 @@
 		//       Commented out below is something like what we want, I think.
 		
 		loadChat();
-		
-		if (!drawing)
+		if (play == true)
 		{
-			checkIfFrameIsBeingUsed(c); // < --- This draws the frame used indicator.
-			var frameVer;
-			if (c == 0) frameVer = newestVersionFrame0;
-			else if (c == 1) frameVer = newestVersionFrame1;
-			else if (c == 2) frameVer = newestVersionFrame2;
-			else if (c == 3) frameVer = newestVersionFrame3;
-			else if (c == 4) frameVer = newestVersionFrame4;
-			else if (c == 5) frameVer = newestVersionFrame5;
-			else if (c == 6) frameVer = newestVersionFrame6;
-			if (findFrameNewestVersion(c) != frameVer) {
-				drawReelFrame(c);
-				frameVer = findFrameNewestVersion(c);
-				if (c == 0) newestVersionFrame0 = frameVer;
-				else if (c == 1) newestVersionFrame1 = frameVer;
-				else if (c == 2) newestVersionFrame2 = frameVer;
-				else if (c == 3) newestVersionFrame3 = frameVer;
-				else if (c == 4) newestVersionFrame4 = frameVer;
-				else if (c == 5) newestVersionFrame5 = frameVer;
-				else if (c == 6) newestVersionFrame6 = frameVer;
-			}
-				
 			if (c < 7) 
+			{
+				
+				var random = Math.floor(Math.random()*100);
+		
+				var img = new Image();
+				var name = "imgs/" + projectName + "Frame" + c + ".png?" + random;
+				img.src = name;
+		
+				img.onload = function() {
+					context.drawImage(img, 297, 72, 630, 366, 297, 72, 630, 366);
+					t=setTimeout("timedCount()",2001);
+				};
 				c=c+1;
+			}
 			else
+			{
 			 	c = 0;
+				play = false;
+				var img = new Image();
+				var name = "imgs/" + projectName + frameName + ".png?" + random;
+				img.src = name;
+		
+				img.onload = function() {
+					context.drawImage(img, 297, 72, 630, 366, 297, 72, 630, 366);
+					t=setTimeout("timedCount()",1001);
+				};
+			}
+			
 		}
-	
-		t=setTimeout("timedCount()",1001);
+		else
+		{
+			if (!drawing)
+			{
+				checkIfFrameIsBeingUsed(c); // < --- This draws the frame used indicator.
+				var frameVer;
+				if (c == 0) frameVer = newestVersionFrame0;
+				else if (c == 1) frameVer = newestVersionFrame1;
+				else if (c == 2) frameVer = newestVersionFrame2;
+				else if (c == 3) frameVer = newestVersionFrame3;
+				else if (c == 4) frameVer = newestVersionFrame4;
+				else if (c == 5) frameVer = newestVersionFrame5;
+				else if (c == 6) frameVer = newestVersionFrame6;
+				if (findFrameNewestVersion(c) != frameVer) {
+					drawReelFrame(c);
+					frameVer = findFrameNewestVersion(c);
+					if (c == 0) newestVersionFrame0 = frameVer;
+					else if (c == 1) newestVersionFrame1 = frameVer;
+					else if (c == 2) newestVersionFrame2 = frameVer;
+					else if (c == 3) newestVersionFrame3 = frameVer;
+					else if (c == 4) newestVersionFrame4 = frameVer;
+					else if (c == 5) newestVersionFrame5 = frameVer;
+					else if (c == 6) newestVersionFrame6 = frameVer;
+				}
+				
+				if (c < 7) 
+					c=c+1;
+				else
+				 	c = 0;
+			}
+			t=setTimeout("timedCount()",1001);
+		}
 	}
 
 	function doTimer()
@@ -500,6 +534,12 @@
 		{
 			lockFrame();
 		}
+		else if (mouseX > 213 && mouseX < 253 && mouseY > 7 && mouseY < 47)
+		{
+			//alert("play");
+			play = true;
+			c = 0;
+		}
 		
 		else
 		{
@@ -596,6 +636,12 @@
 		else if (mouseX > 246 && mouseX < 292 && mouseY > 395 && mouseY < 440)
 		{
 			lockFrame();
+		}
+		else if (mouseX > 213 && mouseX < 253 && mouseY > 7 && mouseY < 47)
+		{
+			//alert("play");
+			play = true;
+			c = 0;
 		}
 		else
 		{
