@@ -35,6 +35,8 @@
 	img_canvas.src = "canvas.jpg";
 	var img_playButton = new Image();
 	img_playButton.src = "Play_button.png";
+	var img_lockButton = new Image();
+	img_lockButton.src = "Sm_lock.png";
 	var drawing = false;
 	
 	var projectName = "theGreatEscape";
@@ -275,6 +277,7 @@
 		context.drawImage(img_sound_button, 937, 315);
 		context.drawImage(img_pallette_buttons, 246, 90);
 		context.drawImage(img_playButton, 213, 7);
+		context.drawImage(img_lockButton, 262, 394);
 	}
 	
 	function drawFrameIndicator(frameNum, color, width)
@@ -473,26 +476,31 @@
 		{
 			curColor = colorPurple;	
 		}
-		if (mouseX > 246 && mouseX < 292 && mouseY > 150 && mouseY < 197)
+		else if (mouseX > 246 && mouseX < 292 && mouseY > 150 && mouseY < 197)
 		{
 			curColor = colorBlue;	
 		}
-		if (mouseX > 246 && mouseX < 292 && mouseY > 197 && mouseY < 244)
+		else if (mouseX > 246 && mouseX < 292 && mouseY > 197 && mouseY < 244)
 		{
 			curColor = colorGreen;	
 		}
-		if (mouseX > 246 && mouseX < 292 && mouseY > 244 && mouseY < 291)
+		else if (mouseX > 246 && mouseX < 292 && mouseY > 244 && mouseY < 291)
 		{
 			curColor = colorYellow;	
 		}
-		if (mouseX > 246 && mouseX < 292 && mouseY > 291 && mouseY < 338)
+		else if (mouseX > 246 && mouseX < 292 && mouseY > 291 && mouseY < 338)
 		{
 			curColor = colorOrange;	
 		}
-		if (mouseX > 246 && mouseX < 292 && mouseY > 338 && mouseY < 385)
+		else if (mouseX > 246 && mouseX < 292 && mouseY > 338 && mouseY < 385)
 		{
 			curColor = colorRed;	
 		}
+		else if (mouseX > 246 && mouseX < 292 && mouseY > 395 && mouseY < 440)
+		{
+			lockFrame();
+		}
+		
 		else
 		{
 			paint = true;
@@ -565,25 +573,29 @@
 		{
 			curColor = colorPurple;	
 		}
-		if (mouseX > 246 && mouseX < 292 && mouseY > 150 && mouseY < 197)
+		else if (mouseX > 246 && mouseX < 292 && mouseY > 150 && mouseY < 197)
 		{
 			curColor = colorBlue;	
 		}
-		if (mouseX > 246 && mouseX < 292 && mouseY > 197 && mouseY < 244)
+		else if (mouseX > 246 && mouseX < 292 && mouseY > 197 && mouseY < 244)
 		{
 			curColor = colorGreen;	
 		}
-		if (mouseX > 246 && mouseX < 292 && mouseY > 244 && mouseY < 291)
+		else if (mouseX > 246 && mouseX < 292 && mouseY > 244 && mouseY < 291)
 		{
 			curColor = colorYellow;	
 		}
-		if (mouseX > 246 && mouseX < 292 && mouseY > 291 && mouseY < 338)
+		else if (mouseX > 246 && mouseX < 292 && mouseY > 291 && mouseY < 338)
 		{
 			curColor = colorOrange;	
 		}
-		if (mouseX > 246 && mouseX < 292 && mouseY > 338 && mouseY < 385)
+		else if (mouseX > 246 && mouseX < 292 && mouseY > 338 && mouseY < 385)
 		{
 			curColor = colorRed;	
+		}
+		else if (mouseX > 246 && mouseX < 292 && mouseY > 395 && mouseY < 440)
+		{
+			lockFrame();
 		}
 		else
 		{
