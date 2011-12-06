@@ -39,6 +39,7 @@
 	img_lockButton.src = "Sm_lock.png";
 	var drawing = false;
 	var play = false;
+	var lockedFrame = "none";
 	
 	var projectName = "theGreatEscape";
 	var frameName = "Frame0";
@@ -505,8 +506,12 @@
 			switchFrames("Frame6");
 		}
 		
-		// paint pallette
-		if (mouseX > 246 && mouseX < 292 && mouseY > 90 && mouseY < 150)
+		// paint
+		if (mouseX > 246 && mouseX < 950 && mouseY > 50 && mouseY < 440 && lockedFrame == currentFrameNum)
+		{
+			alert("Frame Locked!");
+		}
+		else if (mouseX > 246 && mouseX < 292 && mouseY > 90 && mouseY < 150)
 		{
 			curColor = colorPurple;	
 		}
@@ -540,7 +545,6 @@
 			play = true;
 			c = 0;
 		}
-		
 		else
 		{
 			paint = true;
@@ -608,8 +612,12 @@
 			switchFrames("Frame6");
 		}
 		
-		// paint pallette
-		if (mouseX > 246 && mouseX < 292 && mouseY > 90 && mouseY < 150)
+		// paint
+		if (mouseX > 246 && mouseX < 950 && mouseY > 50 && mouseY < 440 && lockedFrame == currentFrameNum)
+		{
+			alert("Frame Locked!");
+		}
+		else if (mouseX > 246 && mouseX < 292 && mouseY > 90 && mouseY < 150)
 		{
 			curColor = colorPurple;	
 		}
@@ -721,8 +729,10 @@
 			if (ajax.readyState == 4) {
 				if (checkIfFrameIsLocked(currentFrameNum) == '1') {
 					drawFrameIndicator( currentFrameNum, colorPurple, 5);
+					lockedFrame = currentFrameNum;
 				} else {
 					drawFrameIndicator( currentFrameNum, colorRed, 5);
+					lockedFrame = "none";
 				}
 			}
 		}
